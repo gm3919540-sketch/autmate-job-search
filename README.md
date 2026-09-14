@@ -2,31 +2,34 @@
 
 ApplyFlow is a local, portfolio-scale implementation of a grounded job application workflow. It turns verified candidate evidence into a reviewed application package, without inventing claims or submitting anything automatically.
 
-## What works now
+## Spring Backend
 
-- A dashboard seeded with a realistic job and a verified candidate knowledge base.
-- Deterministic workflow orchestration: analysis, fit score, evidence retrieval, package creation, validation, approval, and tracking.
-- A hard approval gate: an application cannot be marked submitted before approval.
-- A durable local JSON state store for demo sessions.
-- Automated tests for grounding, approval, and status transitions.
+- Spring Boot REST API for workflow state, analysis, human approval, and submission enforcement.
+- Spring AI configuration for Google Gemini chat and embeddings, with secrets read only from environment variables.
+- PostgreSQL/pgvector configuration plus Flyway migrations for verified facts and workflow runs.
+- Redis configuration for rate limiting, distributed locks, caching, and short-lived workflow coordination.
+- Docker Compose services for PostgreSQL with pgvector and Redis.
+- JUnit coverage for the approval boundary.
 
 ## Run it
 
-Requires Node.js 20 or later.
+Requires Java 21, Maven, PostgreSQL with pgvector, Redis, and a Gemini API key for AI-enabled flows.
 
 ```powershell
-npm start
+cd backend
+mvn spring-boot:run
 ```
 
-Open `http://localhost:4173`. The runnable adapter lives in `backend/adapter`; the dashboard assets live in `frontend/public`.
+Open `http://localhost:8080/api/workflows/current`.
 
 ```powershell
-npm test
+cd backend
+mvn test
 ```
 
 ## Production Architecture
 
-The runnable demo avoids credentials and job-board access. The production implementation described in the blueprint replaces the local adapter with Spring Boot, Spring AI and Gemini; PostgreSQL plus pgvector as durable fact and vector storage; Redis for locks, rate limits and short-lived coordination; React/Vite/Tailwind for the dashboard; Flyway migrations; Spring Security; Docker; and permitted job/application integrations. See [WHY.md](WHY.md) and [FLOWDIAGRAM.md](FLOWDIAGRAM.md).
+The service avoids credentials and job-board access until explicit permitted integrations are configured. The next backend increments are Spring Security, candidate/document persistence, vector retrieval, Gemini-backed drafting, and job-source adapters. See [WHY.md](WHY.md) and [FLOWDIAGRAM.md](FLOWDIAGRAM.md).
 
 ## Safety boundary
 
