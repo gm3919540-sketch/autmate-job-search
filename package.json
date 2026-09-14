@@ -1,0 +1,11 @@
+{
+  "name": "applyflow",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A grounded, human-approved job application workflow demo",
+  "scripts": {
+    "start": "node backend/adapter/server.js",
+    "test": "node test/run-tests.js"
+  }
+}
+
