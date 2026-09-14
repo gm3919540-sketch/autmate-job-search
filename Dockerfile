@@ -1,8 +1,13 @@
-FROM node:24-alpine
+FROM maven:3.9.11-eclipse-temurin-21 AS build
+WORKDIR /build
+COPY backend/pom.xml ./pom.xml
+RUN mvn -q -DskipTests dependency:go-offline
+COPY backend/src ./src
+RUN mvn -q -DskipTests package
+
+FROM eclipse-temurin:21-jre
 WORKDIR /app
-COPY package.json ./
-COPY backend ./backend
-COPY frontend ./frontend
-EXPOSE 4173
-CMD ["node", "server.js"]
+COPY --from=build /build/target/applyflow-api-0.1.0-SNAPSHOT.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar"]
 
