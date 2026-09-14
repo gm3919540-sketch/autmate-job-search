@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: applyflow-api
+  datasource:
+    url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/applyflow}
+    username: ${POSTGRES_USER:applyflow}
+    password: ${POSTGRES_PASSWORD:applyflow}
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+  ai:
+    google:
+      genai:
+        api-key: ${GEMINI_API_KEY:}
+        chat:
+          options:
+            model: ${GEMINI_MODEL:gemini-2.5-flash}
+    vectorstore:
+      pgvector:
+        initialize-schema: false
+        index-type: HNSW
+        distance-type: COSINE_DISTANCE
+        dimensions: ${EMBEDDING_DIMENSIONS:768}
+  flyway:
+    enabled: true
+server:
+  port: ${PORT:8080}
+
