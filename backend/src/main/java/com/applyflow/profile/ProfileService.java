@@ -32,6 +32,15 @@ public class ProfileService {
     fact.verify();
     return factView(fact);
   }
+  @Transactional(readOnly = true)
+  public ProfileViews.Fact verifiedFact(UUID profileId, UUID factId) {
+    CandidateFact fact = facts.findById(factId).orElseThrow(() -> new EntityNotFoundException("Candidate fact not found"));
+    if (!facts.findAllByProfileIdOrderByCreatedAtDesc(profileId).stream().anyMatch(item -> item.getId().equals(factId))) {
+      throw new EntityNotFoundException("Candidate fact not found for profile");
+    }
+    if (!fact.isVerified()) throw new IllegalStateException("Only verified facts can enter candidate knowledge");
+    return factView(fact);
+  }
   private CandidateProfile profile(UUID id) { return profiles.findById(id).orElseThrow(() -> new EntityNotFoundException("Candidate profile not found")); }
   private ProfileViews.Profile view(CandidateProfile profile) {
     List<ProfileViews.Fact> profileFacts = facts.findAllByProfileIdOrderByCreatedAtDesc(profile.getId()).stream().map(this::factView).toList();
