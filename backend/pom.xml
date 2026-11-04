@@ -4,7 +4,7 @@
   <parent><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-parent</artifactId><version>3.5.7</version><relativePath/></parent>
   <groupId>com.applyflow</groupId><artifactId>applyflow-api</artifactId><version>0.1.0-SNAPSHOT</version>
   <name>applyflow-api</name><description>Grounded job application workflow API</description>
-  <properties><java.version>21</java.version><spring-ai.version>1.0.9</spring-ai.version></properties>
+  <properties><java.version>21</java.version><spring-ai.version>1.1.8</spring-ai.version></properties>
   <dependencyManagement><dependencies><dependency><groupId>org.springframework.ai</groupId><artifactId>spring-ai-bom</artifactId><version>${spring-ai.version}</version><type>pom</type><scope>import</scope></dependency></dependencies></dependencyManagement>
   <dependencies>
     <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-web</artifactId></dependency>
