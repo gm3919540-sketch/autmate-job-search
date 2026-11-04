@@ -1,0 +1,31 @@
+CREATE TABLE IF NOT EXISTS jobs (
+  id UUID PRIMARY KEY,
+  source VARCHAR(80) NOT NULL,
+  company VARCHAR(320) NOT NULL,
+  title VARCHAR(320) NOT NULL,
+  location VARCHAR(320) NOT NULL,
+  description TEXT NOT NULL,
+  url VARCHAR(2048) NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS job_requirements (
+  id UUID PRIMARY KEY,
+  job_id UUID NOT NULL REFERENCES jobs(id) ON DELETE CASCADE,
+  category VARCHAR(80) NOT NULL,
+  requirement TEXT NOT NULL,
+  mandatory BOOLEAN NOT NULL DEFAULT FALSE
+);
+
+CREATE TABLE IF NOT EXISTS job_matches (
+  id UUID PRIMARY KEY,
+  job_id UUID NOT NULL REFERENCES jobs(id) ON DELETE CASCADE,
+  profile_id UUID NOT NULL REFERENCES candidate_profiles(id) ON DELETE CASCADE,
+  score INTEGER NOT NULL CHECK (score BETWEEN 0 AND 100),
+  hard_eligible BOOLEAN NOT NULL,
+  explanation TEXT NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS job_matches_profile_created_idx ON job_matches(profile_id, created_at DESC);
+
